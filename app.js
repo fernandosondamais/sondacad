@@ -15,6 +15,7 @@ const RIBBON_ORDER_STORAGE_KEY = "sondacadRibbonOrder";
 const RIBBON_BUTTON_ORDER_STORAGE_KEY = "sondacadRibbonButtonOrder";
 const TOP_COMMAND_ORDER_STORAGE_KEY = "sondacadTopCommandOrder";
 const WELCOME_BANNER_STORAGE_KEY = "sondacadWelcomeDismissed";
+const RIBBON_COMPACT_STORAGE_KEY = "sondacadRibbonCompact";
 const DEFAULT_TOP_COMMAND_ORDER = [
   "actionClusterLayout",
   "actionClusterProject",
@@ -539,12 +540,26 @@ function toggleWorkspacePart(part) {
   setWorkspaceLayout({ [part]: !state.workspaceLayout[part] });
 }
 
+let focusModeSnapshot = null;
+
 function focusDrawingArea() {
-  setWorkspaceLayout({ leftPanel: false, rightPanel: false, ribbon: false });
-  setStatus("Area livre ativada");
+  const btn = document.getElementById("focusDrawingBtn");
+  if (focusModeSnapshot) {
+    setWorkspaceLayout(focusModeSnapshot, false);
+    focusModeSnapshot = null;
+    btn?.classList.remove("is-active");
+    setStatus("Layout restaurado");
+    return;
+  }
+  focusModeSnapshot = { ...state.workspaceLayout };
+  setWorkspaceLayout({ leftPanel: false, rightPanel: false, ribbon: false }, false);
+  btn?.classList.add("is-active");
+  setStatus("Area livre — clique Livre novamente para voltar");
 }
 
 function resetWorkspaceLayout() {
+  focusModeSnapshot = null;
+  document.getElementById("focusDrawingBtn")?.classList.remove("is-active");
   state.workspaceLayout = { ...DEFAULT_WORKSPACE_LAYOUT };
   try {
     localStorage.removeItem(RIBBON_ORDER_STORAGE_KEY);
@@ -648,6 +663,48 @@ function saveTopCommandOrder() {
   } catch (error) {
     // Best-effort persistence only.
   }
+}
+
+function initializeRibbonCompact() {
+  const app = document.querySelector(".app");
+  const btn = document.getElementById("toggleRibbonCompactBtn");
+  if (!app || !btn) return;
+  let compact = true;
+  try {
+    const stored = localStorage.getItem(RIBBON_COMPACT_STORAGE_KEY);
+    if (stored === "0") compact = false;
+  } catch (error) {
+    // Best-effort persistence only.
+  }
+  app.classList.toggle("ribbon-compact", compact);
+  btn.classList.toggle("is-active", compact);
+  btn.setAttribute("aria-pressed", compact ? "true" : "false");
+  btn.addEventListener("click", () => {
+    const next = !app.classList.contains("ribbon-compact");
+    app.classList.toggle("ribbon-compact", next);
+    btn.classList.toggle("is-active", next);
+    btn.setAttribute("aria-pressed", next ? "true" : "false");
+    try {
+      localStorage.setItem(RIBBON_COMPACT_STORAGE_KEY, next ? "1" : "0");
+    } catch (error) {
+      // Best-effort persistence only.
+    }
+    setStatus(next ? "Faixa CAD compacta" : "Faixa CAD completa");
+  });
+}
+
+function initializeQuickDock() {
+  document.querySelectorAll(".quick-dock .tool").forEach((btn) => {
+    btn.addEventListener("click", () => setTool(btn.dataset.tool));
+  });
+}
+
+function updateActiveToolUi(tool) {
+  const chip = document.getElementById("activeToolChip");
+  if (chip) chip.textContent = toolLabel(tool);
+  document.querySelectorAll(".quick-dock .tool").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.tool === tool);
+  });
 }
 
 function initializeWelcomeBanner() {
@@ -3537,6 +3594,7 @@ function setTool(tool, options = {}) {
   document.querySelectorAll(".tool").forEach((btn) => {
     btn.classList.toggle("is-active", btn.dataset.tool === tool);
   });
+  updateActiveToolUi(tool);
   canvas.style.cursor = tool === "pan" ? "grab" : "crosshair";
   if (tool !== "dimension" && tool !== "dimensionContinue") {
     state.measureStart = null;
@@ -7957,6 +8015,7 @@ document.getElementById("clearLotTopBtn").addEventListener("click", clearLot);
 document.getElementById("undoBtn").addEventListener("click", undoLastCommand);
 document.getElementById("fitBtn").addEventListener("click", fitToModel);
 document.getElementById("autoDimBtn").addEventListener("click", autoDimension);
+document.getElementById("autoDimLeftBtn")?.addEventListener("click", autoDimension);
 document.getElementById("exportMenuBtn").addEventListener("click", (event) => {
   event.stopPropagation();
   toggleExportMenu();
@@ -8193,6 +8252,8 @@ window.sondacadExportApi = {
 applyToolbarScale();
 initializeWelcomeBanner();
 initializeShortcutsToggle();
+initializeRibbonCompact();
+initializeQuickDock();
 initializeTopCommandDrag();
 initializeRibbonDrag();
 initializeRibbonButtonDrag();
@@ -8202,5 +8263,6 @@ bindProjectFields();
 updateUndoState();
 updateOrthoUi();
 updateProfileNavigationUi();
+updateActiveToolUi(state.tool);
 resizeCanvas();
 setTimeout(fitToModel, 50);

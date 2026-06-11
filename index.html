@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=20260611-sondacad27">
-  <script defer src="./app.js?v=20260611-sondacad27"></script>
+  <link rel="stylesheet" href="./style.css?v=20260611-sondacad28">
+  <script defer src="./app.js?v=20260611-sondacad28"></script>
 </head>
 <body>
   <div id="welcomeBanner" class="welcome-banner" role="region" aria-label="Boas-vindas">
@@ -34,6 +34,10 @@
             <h1>SONDACAD</h1>
             <p id="projectSubtitle">Sondamais - croquis e perfil de sondagem</p>
           </div>
+          <nav class="view-tabs view-tabs-inline" aria-label="Telas">
+            <button class="view-tab is-active" data-view="cad" data-key="2D" type="button">Croqui 2D</button>
+            <button class="view-tab" data-view="profile" data-key="3D" type="button">Perfil 3D</button>
+          </nav>
         </div>
         <div class="quick-actions" aria-label="Acoes rapidas">
           <div class="action-cluster action-cluster-layout" aria-label="Layout">
@@ -46,7 +50,8 @@
               <button id="toggleLeftPanelBtn" class="quiet layout-toggle is-active" data-key="PE" title="Mostrar ou ocultar painel esquerdo" type="button" aria-pressed="true">Esquerdo</button>
               <button id="toggleRightPanelBtn" class="quiet layout-toggle is-active" data-key="PD" title="Mostrar ou ocultar painel direito" type="button" aria-pressed="true">Direito</button>
               <button id="toggleRibbonBtn" class="quiet layout-toggle is-active" data-key="FX" title="Mostrar ou ocultar faixa de comandos" type="button" aria-pressed="true">Faixa</button>
-              <button id="focusDrawingBtn" class="quiet focus-btn" data-key="LIVRE" title="Liberar a maior area de desenho" type="button">Livre</button>
+              <button id="toggleRibbonCompactBtn" class="quiet layout-toggle is-active" type="button" title="Modo compacto da faixa CAD" aria-pressed="true">Compacto</button>
+              <button id="focusDrawingBtn" class="quiet focus-btn" data-key="LIVRE" title="Maximizar prancha (clique de novo para voltar)" type="button">Livre</button>
               <button id="resetWorkspaceBtn" class="quiet" data-key="LAY" title="Restaurar layout padrao" type="button">Layout</button>
               <button id="toggleShortcutsBtn" class="quiet shortcuts-toggle" type="button" title="Mostrar atalhos de teclado nos botoes" aria-pressed="false">Atalhos</button>
             </div>
@@ -104,10 +109,10 @@
         <div class="ribbon-group" data-toolbar-group="draw" draggable="true">
           <div class="ribbon-tools">
             <button class="tool" data-tool="line" data-key="L" title="Linha: clique inicio e fim">Linha</button>
-            <button class="tool" data-tool="polyline" data-key="PL" title="Polilinha: clique os vertices e Enter para concluir">Polilinha</button>
-            <button class="tool" data-tool="rectangle" data-key="R/REC" title="Retangulo: clique dois cantos">Retang.</button>
-            <button class="tool" data-tool="circle" data-key="C" title="Circulo: clique centro e raio">Circulo</button>
-            <button class="tool" data-tool="arc" data-key="A" title="Arco: centro, inicio e fim">Arco</button>
+            <button class="tool ribbon-extra" data-tool="polyline" data-key="PL" title="Polilinha: clique os vertices e Enter para concluir">Polilinha</button>
+            <button class="tool ribbon-extra" data-tool="rectangle" data-key="R/REC" title="Retangulo: clique dois cantos">Retang.</button>
+            <button class="tool ribbon-extra" data-tool="circle" data-key="C" title="Circulo: clique centro e raio">Circulo</button>
+            <button class="tool ribbon-extra" data-tool="arc" data-key="A" title="Arco: centro, inicio e fim">Arco</button>
             <button class="tool road-tool" data-tool="road" data-key="RD/RU" title="Rua/asfalto: clique inicio e fim">Rua</button>
             <button class="tool sidewalk-tool" data-tool="sidewalk" data-key="PAS" title="Passeio/guia: clique inicio e fim">Passeio</button>
           </div>
@@ -119,26 +124,26 @@
             <button id="copyBtn" type="button" data-key="CO/CP" title="Copiar selecionado">Copiar</button>
             <button id="rotateBtn" type="button" data-key="RO" title="Rotacionar selecionado">Rotacionar</button>
             <button id="mirrorBtn" type="button" data-key="MI" title="Espelhar selecionado">Espelhar</button>
-            <button id="stretchBtn" type="button" data-key="ST" title="Esticar segmento, divisa ou vertice selecionado">Stretch</button>
-            <button id="scaleBtn" type="button" data-key="SC" title="Escalar selecionado">Escala</button>
-            <button id="arrayBtn" type="button" data-key="AR" title="Matriz retangular do selecionado">Matriz</button>
-            <button id="trimBtn" type="button" data-key="TR" title="Recortar linha pelo terreno">Trim</button>
+            <button id="stretchBtn" type="button" data-key="ST" class="ribbon-extra" title="Esticar segmento, divisa ou vertice selecionado">Stretch</button>
+            <button id="scaleBtn" type="button" data-key="SC" class="ribbon-extra" title="Escalar selecionado">Escala</button>
+            <button id="arrayBtn" type="button" data-key="AR" class="ribbon-extra" title="Matriz retangular do selecionado">Matriz</button>
+            <button id="trimBtn" type="button" data-key="TR" class="ribbon-extra" title="Recortar linha pelo terreno">Trim</button>
             <button id="offsetBtn" type="button" data-key="O" title="Informe a distancia e clique no objeto ou segmento para criar copia paralela">Offset</button>
             <button id="filletBtn" type="button" data-key="F" title="Arredondar cantos de polilinha ou terreno">Fillet</button>
-            <button id="curveTerrainBtn" type="button" data-key="CT" title="Arredondar cantos do terreno">Curva terreno</button>
-            <button id="curveSidewalkBtn" type="button" data-key="CC" title="Arredondar calçada, rua ou polilinha selecionada">Curva calcada</button>
-            <button id="joinBtn" type="button" data-key="J" title="Juntar linhas conectadas em polilinha">Join</button>
-            <button id="explodeBtn" type="button" data-key="X" title="Explodir retangulo, polilinha, rua ou passeio em linhas">Explode</button>
+            <button id="curveTerrainBtn" type="button" data-key="CT" class="ribbon-extra" title="Arredondar cantos do terreno">Curva terreno</button>
+            <button id="curveSidewalkBtn" type="button" data-key="CC" class="ribbon-extra" title="Arredondar calçada, rua ou polilinha selecionada">Curva calcada</button>
+            <button id="joinBtn" type="button" data-key="J" class="ribbon-extra" title="Juntar linhas conectadas em polilinha">Join</button>
+            <button id="explodeBtn" type="button" data-key="X" class="ribbon-extra" title="Explodir retangulo, polilinha, rua ou passeio em linhas">Explode</button>
           </div>
           <span>Modificar</span>
         </div>
         <div class="ribbon-group" data-toolbar-group="annotation" draggable="true">
           <div class="ribbon-tools">
             <button class="tool" data-tool="dimension" data-key="D" title="Medir distancia manual">Cota</button>
-            <button class="tool" data-tool="dimensionContinue" data-key="DC" title="Cota continua: clique o primeiro ponto e continue clicando os proximos">Cota cont.</button>
+            <button class="tool ribbon-extra" data-tool="dimensionContinue" data-key="DC" title="Cota continua: clique o primeiro ponto e continue clicando os proximos">Cota cont.</button>
             <button class="tool" data-tool="note" data-key="T" title="Inserir anotacao">Texto</button>
-            <button class="tool" data-tool="noteRua" data-key="RUA" title="Inserir texto RUA">RUA</button>
-            <button class="tool" data-tool="notePasseio" data-key="PASSEIO" title="Inserir texto PASSEIO">PASSEIO</button>
+            <button class="tool ribbon-extra" data-tool="noteRua" data-key="RUA" title="Inserir texto RUA">RUA</button>
+            <button class="tool ribbon-extra" data-tool="notePasseio" data-key="PASSEIO" title="Inserir texto PASSEIO">PASSEIO</button>
             <button id="autoDimBtn" class="primary" data-key="AXY" title="Cotar automaticamente SPs em X/Y, entre pontos e ate o terreno" type="button">Auto X/Y SP</button>
           </div>
           <span>Anotacao</span>
@@ -146,59 +151,77 @@
       </div>
     </header>
 
-    <nav class="view-tabs" aria-label="Telas">
-      <button class="view-tab is-active" data-view="cad" data-key="2D" type="button">Croqui 2D</button>
-      <button class="view-tab" data-view="profile" data-key="3D" type="button">Perfil 3D</button>
-    </nav>
-
     <main id="cadView" class="workspace view-pane">
       <aside class="panel left-panel" aria-label="Camadas e biblioteca">
-        <section class="panel-section">
-          <h2>Camadas</h2>
-          <label><input type="checkbox" data-layer="grid" checked> Grade</label>
-          <label><input type="checkbox" data-layer="terrain" checked> Terreno e divisas</label>
-          <label><input type="checkbox" data-layer="drawings" checked> Desenhos CAD</label>
-          <label><input type="checkbox" data-layer="points" checked> Pontos SP</label>
-          <label><input type="checkbox" data-layer="dimensions" checked> Cotas</label>
-          <label><input type="checkbox" data-layer="notes" checked> Textos</label>
-          <label><input type="checkbox" data-layer="imports" checked> Importado</label>
-        </section>
+        <details class="panel-fold" open>
+          <summary>Camadas</summary>
+          <div class="panel-fold-body layer-list">
+            <label><input type="checkbox" data-layer="grid" checked> Grade</label>
+            <label><input type="checkbox" data-layer="terrain" checked> Terreno e divisas</label>
+            <label><input type="checkbox" data-layer="drawings" checked> Desenhos CAD</label>
+            <label><input type="checkbox" data-layer="points" checked> Pontos SP</label>
+            <label><input type="checkbox" data-layer="dimensions" checked> Cotas</label>
+            <label><input type="checkbox" data-layer="notes" checked> Textos</label>
+            <label><input type="checkbox" data-layer="imports" checked> Importado</label>
+          </div>
+        </details>
 
-        <section class="panel-section">
-          <h2>Biblioteca</h2>
-          <button class="wide" id="addDefaultLotBtn" data-key="LOTE">Lote padrao</button>
-          <button class="wide danger-soft" id="clearLotBtn" data-key="AL">Apagar lote</button>
-          <button class="wide asphalt-action" id="addRoadBtn" data-key="RD/RU">Rua asfalto</button>
-          <button class="wide sidewalk-action" id="addSidewalkBtn" data-key="PAS">Passeio guia</button>
-          <button class="wide" id="addRuaTextBtn" data-key="RUA">Texto RUA</button>
-          <button class="wide" id="addPasseioTextBtn" data-key="PASSEIO">Texto PASSEIO</button>
-          <button class="wide" id="addPointsGridBtn" data-key="MSP">Malha de SP</button>
-          <button class="wide" id="renamePointsCartesianBtn" data-key="SPXY" title="Ordena por X crescente e, em empate, por Y crescente">Renomear SP X/Y</button>
-          <button class="wide" id="pullCad3dBtn" data-key="CAD3D">Puxar CAD p/3D</button>
-          <button class="wide" id="classifyImportBtn" data-key="CLS">Classificar importado</button>
-          <button class="wide" id="clearDimsBtn" data-key="LC">Limpar cotas</button>
-        </section>
+        <details class="panel-fold" open>
+          <summary>Inicio rapido</summary>
+          <div class="panel-fold-body library-grid">
+            <button class="wide library-primary" id="addDefaultLotBtn" data-key="LOTE">Lote padrao</button>
+            <button class="wide library-primary" id="addPointsGridBtn" data-key="MSP">Malha de SP</button>
+            <button class="wide" id="renamePointsCartesianBtn" data-key="SPXY" title="Ordena por X crescente e, em empate, por Y crescente">Renomear SP X/Y</button>
+            <button class="wide" id="autoDimLeftBtn" data-key="AXY" type="button">Auto X/Y SP</button>
+            <button class="wide danger-soft" id="clearLotBtn" data-key="AL">Apagar lote</button>
+          </div>
+        </details>
 
-        <section class="panel-section">
-          <h2>Divisas</h2>
-          <div id="edgeList" class="edge-list"></div>
-        </section>
+        <details class="panel-fold">
+          <summary>Elementos urbanos</summary>
+          <div class="panel-fold-body library-grid">
+            <button class="wide library-road" id="addRoadBtn" data-key="RD/RU">Rua asfalto</button>
+            <button class="wide library-walk" id="addSidewalkBtn" data-key="PAS">Passeio guia</button>
+            <button class="wide" id="addRuaTextBtn" data-key="RUA">Texto RUA</button>
+            <button class="wide" id="addPasseioTextBtn" data-key="PASSEIO">Texto PASSEIO</button>
+          </div>
+        </details>
 
-        <section class="panel-section compact">
-          <h2>Modelo</h2>
-          <dl class="stats">
-            <div><dt>Area</dt><dd id="areaStat">-</dd></div>
-            <div><dt>Perimetro</dt><dd id="perimeterStat">-</dd></div>
-            <div><dt>CAD</dt><dd id="entitiesStat">-</dd></div>
-            <div><dt>Pontos</dt><dd id="pointsStat">-</dd></div>
-            <div><dt>Cotas</dt><dd id="dimsStat">-</dd></div>
-          </dl>
-        </section>
+        <details class="panel-fold">
+          <summary>Avancado</summary>
+          <div class="panel-fold-body library-grid">
+            <button class="wide" id="pullCad3dBtn" data-key="CAD3D">Puxar CAD p/3D</button>
+            <button class="wide" id="classifyImportBtn" data-key="CLS">Classificar importado</button>
+            <button class="wide" id="clearDimsBtn" data-key="LC">Limpar cotas</button>
+          </div>
+        </details>
+
+        <details class="panel-fold">
+          <summary>Divisas</summary>
+          <div class="panel-fold-body">
+            <div id="edgeList" class="edge-list"></div>
+          </div>
+        </details>
+
+        <details class="panel-fold panel-fold-stats" open>
+          <summary>Modelo</summary>
+          <div class="panel-fold-body compact">
+            <dl class="stats">
+              <div><dt>Area</dt><dd id="areaStat">-</dd></div>
+              <div><dt>Perimetro</dt><dd id="perimeterStat">-</dd></div>
+              <div><dt>CAD</dt><dd id="entitiesStat">-</dd></div>
+              <div><dt>Pontos</dt><dd id="pointsStat">-</dd></div>
+              <div><dt>Cotas</dt><dd id="dimsStat">-</dd></div>
+            </dl>
+          </div>
+        </details>
       </aside>
 
       <section class="canvas-zone" aria-label="Prancha CAD">
-        <div class="canvas-header">
-          <div class="scale-row">
+        <div class="canvas-header canvas-header-compact">
+          <details class="canvas-settings">
+            <summary>Grade e precisao</summary>
+            <div class="scale-row">
             <label>Grade <input id="gridStepInput" type="number" min="0.5" step="0.5" value="2"> m</label>
             <label>Snap <input id="snapInput" type="number" min="0.1" step="0.1" value="0.5"> m</label>
             <label><input id="snapToggle" type="checkbox" checked> snap ativo</label>
@@ -232,23 +255,36 @@
                 </div>
               </div>
             </details>
-          </div>
+            </div>
+          </details>
           <div class="command-strip">
+            <div id="activeToolChip" class="active-tool-chip" aria-live="polite">Selecionar</div>
             <label class="command-field">Comando
-              <input id="commandInput" type="text" placeholder="L, V, OB OBJETO, O OFFSET, RO, F3 OSNAP...">
+              <input id="commandInput" type="text" placeholder="Digite L, SP, 3D, Z...">
             </label>
             <div id="statusText" class="status">Pronto</div>
           </div>
         </div>
-        <canvas id="cadCanvas" aria-label="Area de desenho CAD"></canvas>
-        <div class="mini-help">
-          Scroll: zoom | Arrastar: mover/editar | Del: apagar | Esc: cancelar medida
+        <div class="canvas-stage">
+          <nav class="quick-dock" aria-label="Ferramentas rapidas na prancha">
+            <button class="tool quick-dock-btn is-active" data-tool="select" type="button" title="Selecionar (V)">Sel</button>
+            <button class="tool quick-dock-btn" data-tool="pan" type="button" title="Pan (P)">Pan</button>
+            <button class="tool quick-dock-btn" data-tool="terrain" type="button" title="Terreno (G)">Ter</button>
+            <button class="tool quick-dock-btn quick-dock-primary" data-tool="point" type="button" title="Ponto SP (S)">SP</button>
+            <button class="tool quick-dock-btn" data-tool="line" type="button" title="Linha (L)">Lin</button>
+            <button class="tool quick-dock-btn" data-tool="dimension" type="button" title="Cota (D)">Cot</button>
+          </nav>
+          <canvas id="cadCanvas" aria-label="Area de desenho CAD"></canvas>
+          <div class="mini-help">
+            Scroll: zoom | Arrastar: mover | Del: apagar | Esc: cancelar
+          </div>
         </div>
       </section>
 
       <aside class="panel right-panel" aria-label="Propriedades">
-        <section class="panel-section">
-          <h2>Projeto</h2>
+        <details class="panel-fold" open>
+          <summary>Projeto</summary>
+          <div class="panel-fold-body">
           <label class="field">Nome
             <input id="projectNameInput" type="text">
           </label>
@@ -263,10 +299,12 @@
               <option>1:500</option>
             </select>
           </label>
-        </section>
+          </div>
+        </details>
 
-        <section class="panel-section">
-          <h2>Selecionado</h2>
+        <details class="panel-fold" open>
+          <summary>Selecionado</summary>
+          <div class="panel-fold-body">
           <div id="selectionEmpty" class="empty">Nenhum elemento selecionado.</div>
           <form id="selectionForm" class="selection-form hidden">
             <label class="field"><span id="selNameLabel">Identificacao</span>
@@ -316,12 +354,15 @@
             </label>
             <button id="deleteSelectedBtn" type="button" class="danger wide" data-key="E/DEL">Apagar selecionado</button>
           </form>
-        </section>
+          </div>
+        </details>
 
-        <section class="panel-section">
-          <h2>Distancias ao terreno</h2>
+        <details class="panel-fold">
+          <summary>Distancias ao terreno</summary>
+          <div class="panel-fold-body">
           <div id="distanceList" class="distance-list">Selecione um SP.</div>
-        </section>
+          </div>
+        </details>
       </aside>
     </main>
 
