@@ -4,6 +4,10 @@ services:
     runtime: static
     buildCommand: echo "Site estatico SONDACAD pronto para publicacao"
     staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /
+        destination: /index.html
     headers:
       - path: /**
         name: X-Content-Type-Options

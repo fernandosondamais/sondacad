@@ -6,10 +6,23 @@
   <meta name="description" content="SONDACAD - plataforma CAD Sondamais para croquis de sondagem de solo, cotas e perfil estratigrafico 3D.">
   <title>SONDACAD</title>
   <link rel="icon" href="./assets/sondamais-logo.png" type="image/png">
-  <link rel="stylesheet" href="./style.css?v=20260611-sondacad26">
-  <script defer src="./app.js?v=20260611-sondacad26"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=20260611-sondacad27">
+  <script defer src="./app.js?v=20260611-sondacad27"></script>
 </head>
 <body>
+  <div id="welcomeBanner" class="welcome-banner" role="region" aria-label="Boas-vindas">
+    <div class="welcome-copy">
+      <strong>Bem-vindo ao SONDACAD</strong>
+      <p>Comece pelo lote ou terreno, insira os pontos <code>SP</code>, cotar e abra o <strong>Perfil 3D</strong>. Use <code>Livre</code> para ampliar a prancha.</p>
+    </div>
+    <div class="welcome-actions">
+      <a class="welcome-link" href="./manual-tecnico-sondacad.html" target="_blank" rel="noopener">Manual</a>
+      <button id="dismissWelcomeBtn" type="button">Entendi</button>
+    </div>
+  </div>
   <div class="app">
     <header class="topbar">
       <div class="topline">
@@ -23,46 +36,56 @@
           </div>
         </div>
         <div class="quick-actions" aria-label="Acoes rapidas">
-          <div class="toolbar-scale-controls" aria-label="Tamanho da barra de ferramentas">
-            <button id="toolbarSmallerBtn" class="quiet toolbar-scale-btn" data-key="TB-" title="Diminuir barra de ferramentas" type="button">-</button>
-            <span id="toolbarScaleValue" class="toolbar-scale-value">82%</span>
-            <button id="toolbarLargerBtn" class="quiet toolbar-scale-btn" data-key="TB+" title="Aumentar barra de ferramentas" type="button">+</button>
-          </div>
-          <div class="layout-controls" aria-label="Layout da area de trabalho">
-            <button id="toggleLeftPanelBtn" class="quiet layout-toggle is-active" data-key="PE" title="Mostrar ou ocultar painel esquerdo" type="button" aria-pressed="true">E</button>
-            <button id="toggleRightPanelBtn" class="quiet layout-toggle is-active" data-key="PD" title="Mostrar ou ocultar painel direito" type="button" aria-pressed="true">D</button>
-            <button id="toggleRibbonBtn" class="quiet layout-toggle is-active" data-key="FX" title="Mostrar ou ocultar faixa de comandos" type="button" aria-pressed="true">Faixa</button>
-            <button id="focusDrawingBtn" class="quiet" data-key="LIVRE" title="Liberar a maior area de desenho" type="button">Livre</button>
-            <button id="resetWorkspaceBtn" class="quiet" data-key="LAY" title="Restaurar layout padrao" type="button">Layout</button>
-          </div>
-          <a class="file-action manual-link" href="./manual-tecnico-sondacad.html" target="_blank" rel="noopener" data-key="HELP" title="Abrir manual tecnico do SONDACAD">Manual</a>
-          <button id="newProjectBtn" class="quiet" data-key="NOVO">Novo</button>
-          <button id="clearLotTopBtn" class="quiet danger-soft" data-key="AL">Apagar lote</button>
-          <button id="undoBtn" class="quiet" data-key="U" title="Desfazer ultimo comando">Desfazer</button>
-          <button id="fitBtn" class="quiet" data-key="Z">Enquadrar</button>
-          <label class="file-action" data-key="IMP">
-            Importar
-            <input id="fileInput" type="file" accept=".json,.dxf,.dwg,.txt,.svg,.pdf">
-          </label>
-          <label class="file-action" data-key="PDFCAD" title="Importar PDF vetorial como linhas CAD quando possivel">
-            PDF CAD
-            <input id="pdfCadInput" type="file" accept=".pdf">
-          </label>
-          <div class="export-dropdown" id="exportDropdown">
-            <button id="exportMenuBtn" class="quiet export-main-btn" data-key="EXP" type="button" aria-expanded="false">Exportar</button>
-            <div id="exportMenu" class="export-menu hidden" role="menu">
-              <button id="exportPdf2dMenuBtn" type="button" role="menuitem">PDF desenho 2D</button>
-              <button id="exportPdf3dMenuBtn" type="button" role="menuitem">PDF perfil 3D</button>
+          <div class="action-cluster action-cluster-layout" aria-label="Layout">
+            <div class="toolbar-scale-controls" aria-label="Tamanho da barra de ferramentas">
+              <button id="toolbarSmallerBtn" class="quiet toolbar-scale-btn" data-key="TB-" title="Diminuir barra de ferramentas" type="button">-</button>
+              <span id="toolbarScaleValue" class="toolbar-scale-value">82%</span>
+              <button id="toolbarLargerBtn" class="quiet toolbar-scale-btn" data-key="TB+" title="Aumentar barra de ferramentas" type="button">+</button>
+            </div>
+            <div class="layout-controls" aria-label="Layout da area de trabalho">
+              <button id="toggleLeftPanelBtn" class="quiet layout-toggle is-active" data-key="PE" title="Mostrar ou ocultar painel esquerdo" type="button" aria-pressed="true">Esquerdo</button>
+              <button id="toggleRightPanelBtn" class="quiet layout-toggle is-active" data-key="PD" title="Mostrar ou ocultar painel direito" type="button" aria-pressed="true">Direito</button>
+              <button id="toggleRibbonBtn" class="quiet layout-toggle is-active" data-key="FX" title="Mostrar ou ocultar faixa de comandos" type="button" aria-pressed="true">Faixa</button>
+              <button id="focusDrawingBtn" class="quiet focus-btn" data-key="LIVRE" title="Liberar a maior area de desenho" type="button">Livre</button>
+              <button id="resetWorkspaceBtn" class="quiet" data-key="LAY" title="Restaurar layout padrao" type="button">Layout</button>
+              <button id="toggleShortcutsBtn" class="quiet shortcuts-toggle" type="button" title="Mostrar atalhos de teclado nos botoes" aria-pressed="false">Atalhos</button>
             </div>
           </div>
-          <button id="exportJsonBtn" class="quiet" data-key="JSON">JSON</button>
-          <button id="exportSvgBtn" class="quiet" data-key="SVG">SVG</button>
-          <button id="exportDxfBtn" class="quiet" data-key="DXF">DXF</button>
-          <button id="exportPdfBtn" class="quiet" data-key="PDF">PDF</button>
-          <button id="exportDwgBtn" class="quiet" data-key="DWG" title="Exporta arquivo CAD pronto para conversao/salvamento em DWG">DWG</button>
-          <button id="exportModel2dBtn" class="quiet" data-key="M2D" title="Exportar modelo 2D em DXF">Modelo 2D</button>
-          <button id="exportModel3dBtn" class="quiet" data-key="M3D" title="Exportar modelo 3D em glTF">Modelo 3D</button>
-          <button id="exportModelsBundleBtn" class="quiet" data-key="2D3D" title="Exportar modelo 2D e 3D em um ZIP">2D+3D</button>
+          <div class="action-cluster action-cluster-project" aria-label="Projeto">
+            <a class="file-action manual-link" href="./manual-tecnico-sondacad.html" target="_blank" rel="noopener" data-key="HELP" title="Abrir manual tecnico do SONDACAD">Manual</a>
+            <button id="newProjectBtn" class="quiet" data-key="NOVO">Novo</button>
+            <button id="undoBtn" class="quiet" data-key="U" title="Desfazer ultimo comando">Desfazer</button>
+            <button id="fitBtn" class="quiet" data-key="Z">Enquadrar</button>
+            <button id="clearLotTopBtn" class="quiet danger-soft" data-key="AL">Apagar lote</button>
+          </div>
+          <div class="action-cluster action-cluster-io" aria-label="Arquivo">
+            <label class="file-action" data-key="IMP">
+              Importar
+              <input id="fileInput" type="file" accept=".json,.dxf,.dwg,.txt,.svg,.pdf">
+            </label>
+            <label class="file-action" data-key="PDFCAD" title="Importar PDF vetorial como linhas CAD quando possivel">
+              PDF CAD
+              <input id="pdfCadInput" type="file" accept=".pdf">
+            </label>
+            <div class="export-dropdown" id="exportDropdown">
+              <button id="exportMenuBtn" class="quiet export-main-btn primary-soft" data-key="EXP" type="button" aria-expanded="false">Exportar</button>
+              <div id="exportMenu" class="export-menu hidden" role="menu">
+                <p class="export-menu-label">Pranchas</p>
+                <button id="exportPdf2dMenuBtn" type="button" role="menuitem">PDF desenho 2D</button>
+                <button id="exportPdf3dMenuBtn" type="button" role="menuitem">PDF perfil 3D</button>
+                <p class="export-menu-label">CAD e projeto</p>
+                <button id="exportJsonMenuBtn" type="button" role="menuitem">JSON — projeto editavel</button>
+                <button id="exportSvgMenuBtn" type="button" role="menuitem">SVG — desenho vetorial</button>
+                <button id="exportDxfMenuBtn" type="button" role="menuitem">DXF — CAD 2D</button>
+                <button id="exportPdfMenuBtn" type="button" role="menuitem">PDF — prancha 2D</button>
+                <button id="exportDwgMenuBtn" type="button" role="menuitem">DWG — conversao CAD</button>
+                <p class="export-menu-label">Modelos</p>
+                <button id="exportModel2dMenuBtn" type="button" role="menuitem">Modelo 2D (DXF)</button>
+                <button id="exportModel3dMenuBtn" type="button" role="menuitem">Modelo 3D (glTF)</button>
+                <button id="exportModelsBundleMenuBtn" type="button" role="menuitem">Pacote 2D + 3D (ZIP)</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

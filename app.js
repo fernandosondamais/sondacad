@@ -14,25 +14,11 @@ const WORKSPACE_LAYOUT_STORAGE_KEY = "sondacadWorkspaceLayout";
 const RIBBON_ORDER_STORAGE_KEY = "sondacadRibbonOrder";
 const RIBBON_BUTTON_ORDER_STORAGE_KEY = "sondacadRibbonButtonOrder";
 const TOP_COMMAND_ORDER_STORAGE_KEY = "sondacadTopCommandOrder";
+const WELCOME_BANNER_STORAGE_KEY = "sondacadWelcomeDismissed";
 const DEFAULT_TOP_COMMAND_ORDER = [
-  "toolbarScaleControls",
-  "layoutControls",
-  "manualLink",
-  "newProjectBtn",
-  "clearLotTopBtn",
-  "undoBtn",
-  "fitBtn",
-  "fileInputAction",
-  "pdfCadInputAction",
-  "exportDropdown",
-  "exportJsonBtn",
-  "exportSvgBtn",
-  "exportDxfBtn",
-  "exportPdfBtn",
-  "exportDwgBtn",
-  "exportModel2dBtn",
-  "exportModel3dBtn",
-  "exportModelsBundleBtn"
+  "actionClusterLayout",
+  "actionClusterProject",
+  "actionClusterIo"
 ];
 const DEFAULT_WORKSPACE_LAYOUT = {
   leftPanel: true,
@@ -610,6 +596,9 @@ function quickActionItems(container = quickActionsContainer()) {
 
 function quickActionKey(item) {
   if (!item) return "";
+  if (item.classList.contains("action-cluster-layout")) return "actionClusterLayout";
+  if (item.classList.contains("action-cluster-project")) return "actionClusterProject";
+  if (item.classList.contains("action-cluster-io")) return "actionClusterIo";
   if (item.id) return item.id;
   if (item.classList.contains("toolbar-scale-controls")) return "toolbarScaleControls";
   if (item.classList.contains("layout-controls")) return "layoutControls";
@@ -659,6 +648,39 @@ function saveTopCommandOrder() {
   } catch (error) {
     // Best-effort persistence only.
   }
+}
+
+function initializeWelcomeBanner() {
+  const banner = document.getElementById("welcomeBanner");
+  const dismissBtn = document.getElementById("dismissWelcomeBtn");
+  if (!banner || !dismissBtn) return;
+  try {
+    if (localStorage.getItem(WELCOME_BANNER_STORAGE_KEY) === "1") {
+      banner.classList.add("hidden");
+      return;
+    }
+  } catch (error) {
+    // Best-effort persistence only.
+  }
+  dismissBtn.addEventListener("click", () => {
+    banner.classList.add("hidden");
+    try {
+      localStorage.setItem(WELCOME_BANNER_STORAGE_KEY, "1");
+    } catch (error) {
+      // Best-effort persistence only.
+    }
+  });
+}
+
+function initializeShortcutsToggle() {
+  const button = document.getElementById("toggleShortcutsBtn");
+  if (!button) return;
+  button.addEventListener("click", () => {
+    const enabled = document.body.classList.toggle("show-shortcuts");
+    button.classList.toggle("is-active", enabled);
+    button.setAttribute("aria-pressed", enabled ? "true" : "false");
+    setStatus(enabled ? "Atalhos visiveis nos botoes" : "Atalhos ocultos");
+  });
 }
 
 function initializeTopCommandDrag() {
@@ -7935,20 +7957,20 @@ document.getElementById("clearLotTopBtn").addEventListener("click", clearLot);
 document.getElementById("undoBtn").addEventListener("click", undoLastCommand);
 document.getElementById("fitBtn").addEventListener("click", fitToModel);
 document.getElementById("autoDimBtn").addEventListener("click", autoDimension);
-document.getElementById("exportJsonBtn").addEventListener("click", exportJson);
-document.getElementById("exportSvgBtn").addEventListener("click", exportSvg);
-document.getElementById("exportDxfBtn").addEventListener("click", exportDxf);
-document.getElementById("exportPdfBtn").addEventListener("click", exportPdf);
-document.getElementById("exportDwgBtn").addEventListener("click", exportDwg);
-document.getElementById("exportModel2dBtn").addEventListener("click", exportModel2D);
-document.getElementById("exportModel3dBtn").addEventListener("click", exportModel3D);
-document.getElementById("exportModelsBundleBtn").addEventListener("click", exportModelsBundle);
 document.getElementById("exportMenuBtn").addEventListener("click", (event) => {
   event.stopPropagation();
   toggleExportMenu();
 });
 document.getElementById("exportPdf2dMenuBtn").addEventListener("click", () => runExportOption(exportPdf));
 document.getElementById("exportPdf3dMenuBtn").addEventListener("click", () => runExportOption(exportPdf3D));
+document.getElementById("exportJsonMenuBtn").addEventListener("click", () => runExportOption(exportJson));
+document.getElementById("exportSvgMenuBtn").addEventListener("click", () => runExportOption(exportSvg));
+document.getElementById("exportDxfMenuBtn").addEventListener("click", () => runExportOption(exportDxf));
+document.getElementById("exportPdfMenuBtn").addEventListener("click", () => runExportOption(exportPdf));
+document.getElementById("exportDwgMenuBtn").addEventListener("click", () => runExportOption(exportDwg));
+document.getElementById("exportModel2dMenuBtn").addEventListener("click", () => runExportOption(exportModel2D));
+document.getElementById("exportModel3dMenuBtn").addEventListener("click", () => runExportOption(exportModel3D));
+document.getElementById("exportModelsBundleMenuBtn").addEventListener("click", () => runExportOption(exportModelsBundle));
 document.addEventListener("click", (event) => {
   if (!document.getElementById("exportDropdown")?.contains(event.target)) hideExportMenu();
 });
@@ -8169,6 +8191,8 @@ window.sondacadExportApi = {
 };
 
 applyToolbarScale();
+initializeWelcomeBanner();
+initializeShortcutsToggle();
 initializeTopCommandDrag();
 initializeRibbonDrag();
 initializeRibbonButtonDrag();
