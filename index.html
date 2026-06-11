@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SONDACAD - plataforma CAD Sondamais para croquis de sondagem de solo, cotas e perfil estratigrafico 3D.">
+  <title>SONDACAD</title>
+  <link rel="icon" href="./assets/sondamais-logo.png" type="image/png">
+  <link rel="stylesheet" href="./style.css?v=20260611-sondacad26">
+  <script defer src="./app.js?v=20260611-sondacad26"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="topline">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <img src="./assets/sondamais-logo.png" alt="Logo Sondamais">
+          </div>
+          <div>
+            <h1>SONDACAD</h1>
+            <p id="projectSubtitle">Sondamais - croquis e perfil de sondagem</p>
+          </div>
+        </div>
+        <div class="quick-actions" aria-label="Acoes rapidas">
+          <div class="toolbar-scale-controls" aria-label="Tamanho da barra de ferramentas">
+            <button id="toolbarSmallerBtn" class="quiet toolbar-scale-btn" data-key="TB-" title="Diminuir barra de ferramentas" type="button">-</button>
+            <span id="toolbarScaleValue" class="toolbar-scale-value">82%</span>
+            <button id="toolbarLargerBtn" class="quiet toolbar-scale-btn" data-key="TB+" title="Aumentar barra de ferramentas" type="button">+</button>
+          </div>
+          <div class="layout-controls" aria-label="Layout da area de trabalho">
+            <button id="toggleLeftPanelBtn" class="quiet layout-toggle is-active" data-key="PE" title="Mostrar ou ocultar painel esquerdo" type="button" aria-pressed="true">E</button>
+            <button id="toggleRightPanelBtn" class="quiet layout-toggle is-active" data-key="PD" title="Mostrar ou ocultar painel direito" type="button" aria-pressed="true">D</button>
+            <button id="toggleRibbonBtn" class="quiet layout-toggle is-active" data-key="FX" title="Mostrar ou ocultar faixa de comandos" type="button" aria-pressed="true">Faixa</button>
+            <button id="focusDrawingBtn" class="quiet" data-key="LIVRE" title="Liberar a maior area de desenho" type="button">Livre</button>
+            <button id="resetWorkspaceBtn" class="quiet" data-key="LAY" title="Restaurar layout padrao" type="button">Layout</button>
+          </div>
+          <a class="file-action manual-link" href="./manual-tecnico-sondacad.html" target="_blank" rel="noopener" data-key="HELP" title="Abrir manual tecnico do SONDACAD">Manual</a>
+          <button id="newProjectBtn" class="quiet" data-key="NOVO">Novo</button>
+          <button id="clearLotTopBtn" class="quiet danger-soft" data-key="AL">Apagar lote</button>
+          <button id="undoBtn" class="quiet" data-key="U" title="Desfazer ultimo comando">Desfazer</button>
+          <button id="fitBtn" class="quiet" data-key="Z">Enquadrar</button>
+          <label class="file-action" data-key="IMP">
+            Importar
+            <input id="fileInput" type="file" accept=".json,.dxf,.dwg,.txt,.svg,.pdf">
+          </label>
+          <label class="file-action" data-key="PDFCAD" title="Importar PDF vetorial como linhas CAD quando possivel">
+            PDF CAD
+            <input id="pdfCadInput" type="file" accept=".pdf">
+          </label>
+          <div class="export-dropdown" id="exportDropdown">
+            <button id="exportMenuBtn" class="quiet export-main-btn" data-key="EXP" type="button" aria-expanded="false">Exportar</button>
+            <div id="exportMenu" class="export-menu hidden" role="menu">
+              <button id="exportPdf2dMenuBtn" type="button" role="menuitem">PDF desenho 2D</button>
+              <button id="exportPdf3dMenuBtn" type="button" role="menuitem">PDF perfil 3D</button>
+            </div>
+          </div>
+          <button id="exportJsonBtn" class="quiet" data-key="JSON">JSON</button>
+          <button id="exportSvgBtn" class="quiet" data-key="SVG">SVG</button>
+          <button id="exportDxfBtn" class="quiet" data-key="DXF">DXF</button>
+          <button id="exportPdfBtn" class="quiet" data-key="PDF">PDF</button>
+          <button id="exportDwgBtn" class="quiet" data-key="DWG" title="Exporta arquivo CAD pronto para conversao/salvamento em DWG">DWG</button>
+          <button id="exportModel2dBtn" class="quiet" data-key="M2D" title="Exportar modelo 2D em DXF">Modelo 2D</button>
+          <button id="exportModel3dBtn" class="quiet" data-key="M3D" title="Exportar modelo 3D em glTF">Modelo 3D</button>
+          <button id="exportModelsBundleBtn" class="quiet" data-key="2D3D" title="Exportar modelo 2D e 3D em um ZIP">2D+3D</button>
+        </div>
+      </div>
+
+      <div class="ribbon" role="toolbar" aria-label="Ferramentas CAD">
+        <div class="ribbon-group" data-toolbar-group="base" draggable="true">
+          <div class="ribbon-tools">
+            <button class="tool is-active" data-tool="select" data-key="V" title="Selecionar e mover">Selecionar</button>
+            <button class="tool" data-tool="selectObject" data-key="OB" title="Selecionar somente objetos CAD">Objeto</button>
+            <button class="tool" data-tool="selectLine" data-key="SEG" title="Selecionar linhas, segmentos e divisas">Segmento</button>
+            <button class="tool" data-tool="pan" data-key="P" title="Mover vista">Pan</button>
+            <button class="tool" data-tool="terrain" data-key="G" title="Adicionar ou editar vertices do terreno">Terreno</button>
+            <button class="tool primary-tool" data-tool="point" data-key="S/SP" title="Inserir ponto de sondagem">SP</button>
+          </div>
+          <span>Base</span>
+        </div>
+        <div class="ribbon-group" data-toolbar-group="draw" draggable="true">
+          <div class="ribbon-tools">
+            <button class="tool" data-tool="line" data-key="L" title="Linha: clique inicio e fim">Linha</button>
+            <button class="tool" data-tool="polyline" data-key="PL" title="Polilinha: clique os vertices e Enter para concluir">Polilinha</button>
+            <button class="tool" data-tool="rectangle" data-key="R/REC" title="Retangulo: clique dois cantos">Retang.</button>
+            <button class="tool" data-tool="circle" data-key="C" title="Circulo: clique centro e raio">Circulo</button>
+            <button class="tool" data-tool="arc" data-key="A" title="Arco: centro, inicio e fim">Arco</button>
+            <button class="tool road-tool" data-tool="road" data-key="RD/RU" title="Rua/asfalto: clique inicio e fim">Rua</button>
+            <button class="tool sidewalk-tool" data-tool="sidewalk" data-key="PAS" title="Passeio/guia: clique inicio e fim">Passeio</button>
+          </div>
+          <span>Desenho</span>
+        </div>
+        <div class="ribbon-group" data-toolbar-group="modify" draggable="true">
+          <div class="ribbon-tools">
+            <button id="moveBtn" type="button" data-key="M" title="Mover selecionado por deslocamento">Move</button>
+            <button id="copyBtn" type="button" data-key="CO/CP" title="Copiar selecionado">Copiar</button>
+            <button id="rotateBtn" type="button" data-key="RO" title="Rotacionar selecionado">Rotacionar</button>
+            <button id="mirrorBtn" type="button" data-key="MI" title="Espelhar selecionado">Espelhar</button>
+            <button id="stretchBtn" type="button" data-key="ST" title="Esticar segmento, divisa ou vertice selecionado">Stretch</button>
+            <button id="scaleBtn" type="button" data-key="SC" title="Escalar selecionado">Escala</button>
+            <button id="arrayBtn" type="button" data-key="AR" title="Matriz retangular do selecionado">Matriz</button>
+            <button id="trimBtn" type="button" data-key="TR" title="Recortar linha pelo terreno">Trim</button>
+            <button id="offsetBtn" type="button" data-key="O" title="Informe a distancia e clique no objeto ou segmento para criar copia paralela">Offset</button>
+            <button id="filletBtn" type="button" data-key="F" title="Arredondar cantos de polilinha ou terreno">Fillet</button>
+            <button id="curveTerrainBtn" type="button" data-key="CT" title="Arredondar cantos do terreno">Curva terreno</button>
+            <button id="curveSidewalkBtn" type="button" data-key="CC" title="Arredondar calçada, rua ou polilinha selecionada">Curva calcada</button>
+            <button id="joinBtn" type="button" data-key="J" title="Juntar linhas conectadas em polilinha">Join</button>
+            <button id="explodeBtn" type="button" data-key="X" title="Explodir retangulo, polilinha, rua ou passeio em linhas">Explode</button>
+          </div>
+          <span>Modificar</span>
+        </div>
+        <div class="ribbon-group" data-toolbar-group="annotation" draggable="true">
+          <div class="ribbon-tools">
+            <button class="tool" data-tool="dimension" data-key="D" title="Medir distancia manual">Cota</button>
+            <button class="tool" data-tool="dimensionContinue" data-key="DC" title="Cota continua: clique o primeiro ponto e continue clicando os proximos">Cota cont.</button>
+            <button class="tool" data-tool="note" data-key="T" title="Inserir anotacao">Texto</button>
+            <button class="tool" data-tool="noteRua" data-key="RUA" title="Inserir texto RUA">RUA</button>
+            <button class="tool" data-tool="notePasseio" data-key="PASSEIO" title="Inserir texto PASSEIO">PASSEIO</button>
+            <button id="autoDimBtn" class="primary" data-key="AXY" title="Cotar automaticamente SPs em X/Y, entre pontos e ate o terreno" type="button">Auto X/Y SP</button>
+          </div>
+          <span>Anotacao</span>
+        </div>
+      </div>
+    </header>
+
+    <nav class="view-tabs" aria-label="Telas">
+      <button class="view-tab is-active" data-view="cad" data-key="2D" type="button">Croqui 2D</button>
+      <button class="view-tab" data-view="profile" data-key="3D" type="button">Perfil 3D</button>
+    </nav>
+
+    <main id="cadView" class="workspace view-pane">
+      <aside class="panel left-panel" aria-label="Camadas e biblioteca">
+        <section class="panel-section">
+          <h2>Camadas</h2>
+          <label><input type="checkbox" data-layer="grid" checked> Grade</label>
+          <label><input type="checkbox" data-layer="terrain" checked> Terreno e divisas</label>
+          <label><input type="checkbox" data-layer="drawings" checked> Desenhos CAD</label>
+          <label><input type="checkbox" data-layer="points" checked> Pontos SP</label>
+          <label><input type="checkbox" data-layer="dimensions" checked> Cotas</label>
+          <label><input type="checkbox" data-layer="notes" checked> Textos</label>
+          <label><input type="checkbox" data-layer="imports" checked> Importado</label>
+        </section>
+
+        <section class="panel-section">
+          <h2>Biblioteca</h2>
+          <button class="wide" id="addDefaultLotBtn" data-key="LOTE">Lote padrao</button>
+          <button class="wide danger-soft" id="clearLotBtn" data-key="AL">Apagar lote</button>
+          <button class="wide asphalt-action" id="addRoadBtn" data-key="RD/RU">Rua asfalto</button>
+          <button class="wide sidewalk-action" id="addSidewalkBtn" data-key="PAS">Passeio guia</button>
+          <button class="wide" id="addRuaTextBtn" data-key="RUA">Texto RUA</button>
+          <button class="wide" id="addPasseioTextBtn" data-key="PASSEIO">Texto PASSEIO</button>
+          <button class="wide" id="addPointsGridBtn" data-key="MSP">Malha de SP</button>
+          <button class="wide" id="renamePointsCartesianBtn" data-key="SPXY" title="Ordena por X crescente e, em empate, por Y crescente">Renomear SP X/Y</button>
+          <button class="wide" id="pullCad3dBtn" data-key="CAD3D">Puxar CAD p/3D</button>
+          <button class="wide" id="classifyImportBtn" data-key="CLS">Classificar importado</button>
+          <button class="wide" id="clearDimsBtn" data-key="LC">Limpar cotas</button>
+        </section>
+
+        <section class="panel-section">
+          <h2>Divisas</h2>
+          <div id="edgeList" class="edge-list"></div>
+        </section>
+
+        <section class="panel-section compact">
+          <h2>Modelo</h2>
+          <dl class="stats">
+            <div><dt>Area</dt><dd id="areaStat">-</dd></div>
+            <div><dt>Perimetro</dt><dd id="perimeterStat">-</dd></div>
+            <div><dt>CAD</dt><dd id="entitiesStat">-</dd></div>
+            <div><dt>Pontos</dt><dd id="pointsStat">-</dd></div>
+            <div><dt>Cotas</dt><dd id="dimsStat">-</dd></div>
+          </dl>
+        </section>
+      </aside>
+
+      <section class="canvas-zone" aria-label="Prancha CAD">
+        <div class="canvas-header">
+          <div class="scale-row">
+            <label>Grade <input id="gridStepInput" type="number" min="0.5" step="0.5" value="2"> m</label>
+            <label>Snap <input id="snapInput" type="number" min="0.1" step="0.1" value="0.5"> m</label>
+            <label><input id="snapToggle" type="checkbox" checked> snap ativo</label>
+            <label class="toggle-pill"><input id="osnapToggle" type="checkbox" checked> OSNAP F3</label>
+            <label class="toggle-pill"><input id="orthoToggle" type="checkbox"> ORTHO F5</label>
+            <label class="ortho-field">Aciona
+              <select id="orthoModeInput">
+                <option value="shift" selected>Shift</option>
+                <option value="f5">F5</option>
+                <option value="toggle">Botao</option>
+                <option value="off">Desligado</option>
+              </select>
+            </label>
+            <details class="osnap-menu" id="osnapMenu">
+              <summary>Precisao</summary>
+              <div class="osnap-panel">
+                <label><input type="checkbox" data-osnap="endpoint" checked> Endpoint</label>
+                <label><input type="checkbox" data-osnap="midpoint" checked> Midpoint</label>
+                <label><input type="checkbox" data-osnap="center" checked> Center</label>
+                <label><input type="checkbox" data-osnap="node" checked> Node</label>
+                <label><input type="checkbox" data-osnap="quadrant" checked> Quadrant</label>
+                <label><input type="checkbox" data-osnap="intersection" checked> Intersection</label>
+                <label><input type="checkbox" data-osnap="extension" checked> Extension</label>
+                <label><input type="checkbox" data-osnap="perpendicular" checked> Perpendicular</label>
+                <label><input type="checkbox" data-osnap="tangent"> Tangent</label>
+                <label><input type="checkbox" data-osnap="parallel"> Parallel</label>
+                <label><input type="checkbox" data-osnap="nearest" checked> Nearest</label>
+                <div class="osnap-actions">
+                  <button id="osnapAllBtn" data-key="OSA" type="button">Todos</button>
+                  <button id="osnapClearBtn" data-key="OSC" type="button">Limpar</button>
+                </div>
+              </div>
+            </details>
+          </div>
+          <div class="command-strip">
+            <label class="command-field">Comando
+              <input id="commandInput" type="text" placeholder="L, V, OB OBJETO, O OFFSET, RO, F3 OSNAP...">
+            </label>
+            <div id="statusText" class="status">Pronto</div>
+          </div>
+        </div>
+        <canvas id="cadCanvas" aria-label="Area de desenho CAD"></canvas>
+        <div class="mini-help">
+          Scroll: zoom | Arrastar: mover/editar | Del: apagar | Esc: cancelar medida
+        </div>
+      </section>
+
+      <aside class="panel right-panel" aria-label="Propriedades">
+        <section class="panel-section">
+          <h2>Projeto</h2>
+          <label class="field">Nome
+            <input id="projectNameInput" type="text">
+          </label>
+          <label class="field">Cliente / obra
+            <input id="clientInput" type="text">
+          </label>
+          <label class="field">Escala de plotagem
+            <select id="plotScaleInput">
+              <option>1:100</option>
+              <option selected>1:200</option>
+              <option>1:250</option>
+              <option>1:500</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <h2>Selecionado</h2>
+          <div id="selectionEmpty" class="empty">Nenhum elemento selecionado.</div>
+          <form id="selectionForm" class="selection-form hidden">
+            <label class="field"><span id="selNameLabel">Identificacao</span>
+              <input id="selName" type="text">
+            </label>
+            <div class="field-grid">
+              <label class="field"><span id="selXLabel">X (m)</span>
+                <input id="selX" type="number" step="0.01">
+              </label>
+              <label class="field"><span id="selYLabel">Y (m)</span>
+                <input id="selY" type="number" step="0.01">
+              </label>
+            </div>
+            <div class="field-grid entity-only hidden">
+              <label class="field"><span id="selWidthLabel">Largura (m)</span>
+                <input id="selWidth" type="number" step="0.01">
+              </label>
+              <label class="field"><span id="selHeightLabel">Altura (m)</span>
+                <input id="selHeight" type="number" step="0.01">
+              </label>
+            </div>
+            <div class="field-grid point-only">
+              <label class="field"><span id="selElevLabel">Cota topografica (m)</span>
+                <input id="selElev" type="number" step="0.01" placeholder="opcional">
+              </label>
+              <label class="field">Prof. do furo (m)
+                <input id="selDepth" type="number" step="0.1">
+              </label>
+            </div>
+            <div class="field-grid point-only">
+              <label class="field">Compr. estaca (m)
+                <input id="selPileLength" type="number" step="0.1" placeholder="opcional">
+              </label>
+              <label class="field">Parou em
+                <select id="selRefusalType">
+                  <option value="none">Nao parou</option>
+                  <option value="rocha">Rocha impenetravel</option>
+                  <option value="matacao">Matacao / bloco</option>
+                </select>
+              </label>
+            </div>
+            <label class="field point-only">Camadas do solo
+              <textarea id="selLayers" rows="4" placeholder="0-2 Argila; 2-5 Areia; 5-12 Silte"></textarea>
+            </label>
+            <label class="field">Observacao
+              <textarea id="selNote" rows="3"></textarea>
+            </label>
+            <button id="deleteSelectedBtn" type="button" class="danger wide" data-key="E/DEL">Apagar selecionado</button>
+          </form>
+        </section>
+
+        <section class="panel-section">
+          <h2>Distancias ao terreno</h2>
+          <div id="distanceList" class="distance-list">Selecione um SP.</div>
+        </section>
+      </aside>
+    </main>
+
+    <section id="profileView" class="profile-view view-pane hidden" aria-label="Perfil geotecnico 3D">
+      <aside class="panel profile-panel">
+        <section class="panel-section compact">
+          <h2>Modelo 3D</h2>
+          <dl class="stats">
+            <div><dt>SPs</dt><dd id="profilePointsStat">-</dd></div>
+            <div><dt>Prof. max</dt><dd id="profileDepthStat">-</dd></div>
+            <div><dt>Camadas</dt><dd id="profileLayersStat">-</dd></div>
+          </dl>
+        </section>
+        <section class="panel-section">
+          <h2>Interpolacao</h2>
+          <label class="field">Metodo
+            <select id="profileMethodInput">
+              <option value="idw" selected>IDW</option>
+            </select>
+          </label>
+          <label class="field">Exagero vertical
+            <input id="profileExaggerationInput" type="range" min="1" max="8" step="0.5" value="3">
+          </label>
+          <button id="refreshProfileBtn" class="wide primary" data-key="AP3D" type="button">Atualizar perfil</button>
+        </section>
+        <section class="panel-section">
+          <h2>Perfil estratigrafico</h2>
+          <label class="file-action wide spt-report-action" data-key="PDFSPT" title="Importar ficha Sondamais PDF com perfil estratigrafico, espessuras e descricao do material">
+            Ficha Sondamais PDF
+            <input id="sptReportInput" type="file" accept=".pdf,.txt,.csv,.json">
+          </label>
+          <button id="removeSptReportBtn" class="wide danger-soft" data-key="RSPT" type="button" title="Remover camadas importadas do relatorio Sondamais e manter os pontos no croqui">Remover relatorio</button>
+          <div id="sptImportSummary" class="spt-summary">Importe a ficha Sondamais para preencher espessuras e tipos de solo dos SPs.</div>
+          <label class="field">Modelo
+            <select id="stratProfileInput">
+              <option value="manual">Camadas dos SPs</option>
+              <option value="tropical" selected>Residual tropical</option>
+              <option value="sedimentar">Sedimentar arenoso</option>
+              <option value="aluvial">Aluvial saturado</option>
+              <option value="rocha">Rocha alterada</option>
+            </select>
+          </label>
+          <label class="field">Interface
+            <select id="stratVariationInput">
+              <option value="regular">Regular</option>
+              <option value="ondulado" selected>Ondulado</option>
+              <option value="inclinado">Inclinado</option>
+            </select>
+          </label>
+          <button id="applyStratProfileBtn" class="wide primary" data-key="PE3D" type="button">Aplicar perfil</button>
+          <div id="stratProfilePreview" class="strat-preview"></div>
+        </section>
+        <section class="panel-section">
+          <h2>Camadas</h2>
+          <div id="profileLegend" class="profile-legend"></div>
+        </section>
+      </aside>
+      <section class="profile-canvas-zone">
+        <div class="canvas-header">
+          <div class="scale-row">
+            <button id="backToCadBtn" data-key="2D" type="button">Croqui 2D</button>
+            <button id="profileFitBtn" data-key="Z3D" type="button">Enquadrar 3D</button>
+          </div>
+          <div class="command-strip">
+            <label class="command-field profile-command-field">Comando
+              <input id="profileCommandInput" type="text" placeholder="NAVVCUBE ON, NAVBAR OFF, TOP, ISO...">
+            </label>
+            <div id="profileStatusText" class="status">Perfil 3D</div>
+          </div>
+        </div>
+        <canvas id="profileCanvas" aria-label="Visualizacao de perfil do terreno em 3D"></canvas>
+        <div id="viewCube" class="view-cube" aria-label="ViewCube 3D">
+          <button class="view-cube-dir cube-north" data-profile-view="front" data-key="N" type="button">N</button>
+          <button class="view-cube-dir cube-west" data-profile-view="left" data-key="W" type="button">W</button>
+          <button class="view-cube-face" data-profile-view="top" data-key="TOP" type="button">TOP</button>
+          <button class="view-cube-dir cube-east" data-profile-view="right" data-key="E" type="button">E</button>
+          <button class="view-cube-dir cube-south" data-profile-view="back" data-key="S" type="button">S</button>
+          <button class="view-cube-iso" data-profile-view="iso" data-key="ISO" type="button">ISO</button>
+          <span class="view-cube-wcs">WCS</span>
+        </div>
+        <div id="profileNavBar" class="profile-nav-bar" aria-label="Barra de navegacao 3D">
+          <button data-profile-view="iso" data-key="ISO" type="button" title="Orbita / vista isometrica">3D</button>
+          <button id="profileZoomInBtn" data-key="+" type="button" title="Aproximar">+</button>
+          <button id="profileZoomOutBtn" data-key="-" type="button" title="Afastar">-</button>
+          <button id="profilePanHintBtn" data-key="PAN" type="button" title="Pan: pressione o scroll do mouse e arraste. Orbita: Shift + scroll ou Shift + scroll pressionado">Pan</button>
+          <button id="profileFitNavBtn" data-key="FIT" type="button" title="Enquadrar">Fit</button>
+        </div>
+        <div class="mini-help profile-help">
+          Scroll: zoom | Scroll pressionado: pan | Shift + scroll: rotacionar | Shift + scroll pressionado: orbita livre
+        </div>
+      </section>
+    </section>
+    <div id="contextMenu" class="context-menu hidden" role="menu">
+      <button id="repeatCommandBtn" data-key="ENTER" type="button">Repetir comando</button>
+      <button id="contextUndoBtn" data-key="U" type="button">Desfazer</button>
+      <button id="contextSelectBtn" data-key="V" type="button">Selecionar</button>
+      <button id="contextObjectBtn" data-key="OB" type="button">Objeto</button>
+      <button id="contextSegmentBtn" data-key="SEG" type="button">Segmento</button>
+    </div>
+    <div id="precisionDialog" class="precision-dialog hidden" role="dialog" aria-modal="false" aria-label="Ferramenta de precisao">
+      <div class="precision-header">
+        <strong>Precisao OSNAP</strong>
+        <button id="precisionCloseBtn" type="button" aria-label="Fechar precisao">x</button>
+      </div>
+      <label><input type="checkbox" data-osnap="endpoint" checked> Endpoint</label>
+      <label><input type="checkbox" data-osnap="midpoint" checked> Midpoint</label>
+      <label><input type="checkbox" data-osnap="center" checked> Center</label>
+      <label><input type="checkbox" data-osnap="node" checked> Node</label>
+      <label><input type="checkbox" data-osnap="quadrant" checked> Quadrant</label>
+      <label><input type="checkbox" data-osnap="intersection" checked> Intersection</label>
+      <label><input type="checkbox" data-osnap="extension" checked> Extension</label>
+      <label><input type="checkbox" data-osnap="perpendicular" checked> Perpendicular</label>
+      <label><input type="checkbox" data-osnap="tangent"> Tangent</label>
+      <label><input type="checkbox" data-osnap="parallel"> Parallel</label>
+      <label><input type="checkbox" data-osnap="nearest" checked> Nearest</label>
+      <div class="precision-actions">
+        <button id="precisionAllBtn" type="button">Selecionar todos</button>
+        <button id="precisionClearBtn" type="button">Limpar</button>
+      </div>
+    </div>
+    <nav class="model-tabs" aria-label="Abas de modelo">
+      <button class="model-tabs-menu" type="button" aria-label="Menu de modelos">☰</button>
+      <div id="modelTabsList" class="model-tabs-list"></div>
+      <button id="addModelTabBtn" class="model-tab-add" type="button" title="Criar nova aba de modelo">+</button>
+    </nav>
+  </div>
+</body>
+</html>

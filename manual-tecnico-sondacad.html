@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manual Tecnico SONDACAD</title>
+  <style>
+    :root {
+      --green: #5f8f28;
+      --green-dark: #203f15;
+      --lime: #b7e300;
+      --ink: #1f251d;
+      --muted: #60705c;
+      --line: #d5e2cb;
+      --paper: #ffffff;
+      --bg: #f2f6ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.5;
+    }
+    header {
+      padding: 28px clamp(18px, 4vw, 54px);
+      color: #f7ffe8;
+      background: linear-gradient(120deg, #080d08, #15220f 58%, #36551c);
+      border-bottom: 4px solid var(--lime);
+    }
+    header h1 { margin: 0; font-size: clamp(28px, 4vw, 46px); letter-spacing: 0; }
+    header p { max-width: 920px; margin: 8px 0 0; color: #dbe9cf; }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px clamp(18px, 4vw, 54px);
+      background: rgba(255, 255, 255, 0.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+    nav a, .actions button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 11px;
+      color: var(--green-dark);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      font-weight: 700;
+    }
+    nav a:hover, .actions button:hover { border-color: var(--green); background: #f4faec; }
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 290px;
+      gap: 18px;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px clamp(14px, 3vw, 34px) 60px;
+    }
+    article, aside {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 26px rgba(22, 34, 15, 0.08);
+    }
+    article { padding: clamp(20px, 3vw, 38px); }
+    aside { align-self: start; padding: 18px; position: sticky; top: 70px; }
+    h2 { margin: 34px 0 10px; color: var(--green-dark); font-size: 24px; }
+    h3 { margin: 22px 0 8px; color: #31571f; font-size: 18px; }
+    h2:first-child { margin-top: 0; }
+    p, li { font-size: 15px; }
+    code {
+      padding: 1px 5px;
+      border: 1px solid #d8e5cf;
+      border-radius: 5px;
+      background: #f8fbf3;
+      color: #15220f;
+      font-weight: 700;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 22px;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 8px 9px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #eef6e7; color: var(--green-dark); }
+    .callout {
+      margin: 16px 0;
+      padding: 13px 15px;
+      border-left: 4px solid var(--green);
+      border-radius: 6px;
+      background: #f5faef;
+    }
+    .warning { border-left-color: #b36b1b; background: #fff8ed; }
+    .toc {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .toc a { color: var(--green-dark); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .actions button { cursor: pointer; }
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+      aside { position: static; }
+    }
+    @media print {
+      nav, aside, .actions { display: none; }
+      body { background: #fff; }
+      header { color: #111; background: #fff; border-bottom: 2px solid #111; }
+      article { border: 0; box-shadow: none; padding: 0; }
+      main { display: block; max-width: none; padding: 0; }
+      h2 { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Manual Tecnico SONDACAD</h1>
+    <p>Guia para novos usuarios criarem croquis de sondagem, locarem pontos SP, cotarem terreno e visualizarem perfil estratigrafico 3D.</p>
+    <div class="actions">
+      <button type="button" onclick="window.print()">Imprimir / salvar PDF</button>
+      <button type="button" onclick="location.href='./'">Abrir SONDACAD</button>
+    </div>
+  </header>
+
+  <nav aria-label="Atalhos do manual">
+    <a href="#inicio">Inicio</a>
+    <a href="#interface">Interface</a>
+    <a href="#desenho">Desenho</a>
+    <a href="#precisao">Precisao</a>
+    <a href="#modificar">Modificar</a>
+    <a href="#cotas">Cotas</a>
+    <a href="#perfil3d">Perfil 3D</a>
+    <a href="#importar">Importar</a>
+    <a href="#exportar">Exportar</a>
+    <a href="#atalhos">Atalhos</a>
+  </nav>
+
+  <main>
+    <article>
+      <section id="inicio">
+        <h2>1. Objetivo</h2>
+        <p>O SONDACAD e uma plataforma CAD Sondamais para criar croquis de sondagem de solo, posicionar pontos SP, medir relacoes com o terreno, inserir ruas e passeios e gerar um perfil estratigrafico 3D.</p>
+        <div class="callout">
+          <strong>Fluxo recomendado:</strong> criar/importar terreno, inserir SPs, cotar, preencher profundidade/camadas, abrir Perfil 3D, importar ficha Sondamais quando houver e exportar.
+        </div>
+      </section>
+
+      <section id="interface">
+        <h2>2. Interface</h2>
+        <h3>Barra superior</h3>
+        <p>Concentra layout, arquivo, importacao e exportacao. As caixas dessa barra podem ser arrastadas para reorganizar a ordem dos comandos.</p>
+        <h3>Faixa de comandos</h3>
+        <p>Os blocos <code>Base</code>, <code>Desenho</code>, <code>Modificar</code> e <code>Anotacao</code> podem ser arrastados. Os botoes tambem podem ser reorganizados, e a configuracao fica salva no navegador.</p>
+        <h3>Paineis laterais</h3>
+        <p>O painel esquerdo contem camadas, biblioteca, divisas e estatisticas. O painel direito contem dados do projeto, propriedades do selecionado e distancias ao terreno.</p>
+      </section>
+
+      <section id="desenho">
+        <h2>3. Desenho do croqui 2D</h2>
+        <p>Use <code>Terreno</code> para criar o lote e <code>SP</code> para inserir pontos de sondagem. Em cada SP, preencha coordenadas, cota topografica, profundidade e camadas quando necessario.</p>
+        <table>
+          <thead><tr><th>Ferramenta</th><th>Atalho</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td>Selecionar</td><td><code>V</code></td><td>Seleciona e move elementos.</td></tr>
+            <tr><td>Terreno</td><td><code>G</code></td><td>Cria ou edita vertices do lote.</td></tr>
+            <tr><td>SP</td><td><code>S</code> ou <code>SP</code></td><td>Insere ponto de sondagem.</td></tr>
+            <tr><td>Linha</td><td><code>L</code></td><td>Cria linha entre dois pontos.</td></tr>
+            <tr><td>Polilinha</td><td><code>PL</code></td><td>Cria sequencia de segmentos.</td></tr>
+            <tr><td>Retangulo</td><td><code>R</code> ou <code>REC</code></td><td>Cria retangulo por dois cantos.</td></tr>
+            <tr><td>Rua</td><td><code>RD</code> ou <code>RU</code></td><td>Cria faixa de asfalto.</td></tr>
+            <tr><td>Passeio</td><td><code>PAS</code></td><td>Cria passeio/guia com largura editavel.</td></tr>
+          </tbody>
+        </table>
+        <h3>Entrada direta de distancia</h3>
+        <p>Com <code>Linha</code>, <code>Move</code> ou <code>Copiar</code> acionado, digite a distancia desejada, aponte a direcao com o mouse e clique ou pressione <code>Enter</code>.</p>
+      </section>
+
+      <section id="precisao">
+        <h2>4. Precisao: Snap, OSNAP e ORTHO</h2>
+        <p>Use <code>F3</code> para ligar/desligar OSNAP e <code>F5</code> para ORTHO. Durante um comando ativo, pressione <code>Shift</code> para abrir a caixa de modos de precisao.</p>
+        <p>Modos disponiveis: Endpoint, Midpoint, Center, Node, Quadrant, Intersection, Extension, Perpendicular, Tangent, Parallel e Nearest.</p>
+      </section>
+
+      <section id="modificar">
+        <h2>5. Modificacao</h2>
+        <table>
+          <thead><tr><th>Comando</th><th>Atalho</th><th>Funcao</th></tr></thead>
+          <tbody>
+            <tr><td>Move</td><td><code>M</code></td><td>Move o selecionado.</td></tr>
+            <tr><td>Copiar</td><td><code>CO</code> ou <code>CP</code></td><td>Copia o selecionado.</td></tr>
+            <tr><td>Rotacionar</td><td><code>RO</code></td><td>Rotaciona o selecionado.</td></tr>
+            <tr><td>Espelhar</td><td><code>MI</code></td><td>Espelha o selecionado.</td></tr>
+            <tr><td>Stretch</td><td><code>ST</code></td><td>Estica segmentos, vertices ou divisas.</td></tr>
+            <tr><td>Offset</td><td><code>O</code></td><td>Informe a distancia e depois clique na linha, segmento, divisa, polilinha, rua, passeio, circulo ou arco.</td></tr>
+            <tr><td>Fillet</td><td><code>F</code></td><td>Arredonda cantos.</td></tr>
+            <tr><td>Curva terreno</td><td><code>CT</code></td><td>Arredonda o terreno.</td></tr>
+            <tr><td>Curva calcada</td><td><code>CC</code></td><td>Arredonda calcada, rua ou polilinha.</td></tr>
+            <tr><td>Join</td><td><code>J</code></td><td>Junta linhas conectadas.</td></tr>
+            <tr><td>Explode</td><td><code>X</code></td><td>Explode objetos compostos em linhas.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="cotas">
+        <h2>6. Cotas e anotacoes</h2>
+        <p><code>Cota</code> cria medidas entre pontos, SPs e segmentos. <code>Cota cont.</code> cria cotas sequenciais. <code>Auto X/Y SP</code> gera cotas automaticas dos SPs em relacao ao terreno e entre pontos.</p>
+        <p>As cotas podem ser selecionadas e arrastadas para afastamento, mantendo linhas auxiliares retas.</p>
+      </section>
+
+      <section id="perfil3d">
+        <h2>7. Perfil 3D e estratigrafia</h2>
+        <p>A aba <code>Perfil 3D</code> usa coordenadas dos SPs, cota topografica, profundidade, camadas do solo e informacoes de rocha/matacao.</p>
+        <p>Navegacao: scroll para zoom, scroll pressionado para pan, <code>Shift + scroll</code> para rotacionar e ViewCube para vistas TOP/ISO/N/S/E/W.</p>
+        <h3>Ficha Sondamais PDF</h3>
+        <p>Use <code>Ficha Sondamais PDF</code> para importar perfil estratigrafico padrao Sondamais. O sistema tenta reconhecer SP, profundidade, camadas, tipos de solo e impenetravel.</p>
+        <div class="callout warning">
+          PDF escaneado ou protegido pode nao ser interpretado. Nesse caso, gere PDF pesquisavel ou use texto/CSV/JSON.
+        </div>
+      </section>
+
+      <section id="importar">
+        <h2>8. Importacao</h2>
+        <p>O SONDACAD importa <code>JSON</code>, <code>DXF</code>, <code>SVG</code>, <code>PDF CAD</code> e registra <code>DWG</code>. Para geometria DWG editavel, converta para DXF antes de importar.</p>
+      </section>
+
+      <section id="exportar">
+        <h2>9. Exportacao</h2>
+        <ul>
+          <li><code>JSON</code>: projeto editavel.</li>
+          <li><code>SVG</code>: desenho vetorial.</li>
+          <li><code>DXF</code>: CAD 2D.</li>
+          <li><code>PDF</code>: prancha 2D.</li>
+          <li><code>DWG</code>: arquivo CAD preparado para conversao/salvamento como DWG.</li>
+          <li><code>Modelo 2D</code>: DXF do modelo.</li>
+          <li><code>Modelo 3D</code>: glTF do perfil.</li>
+          <li><code>2D+3D</code>: pacote ZIP com ambos.</li>
+        </ul>
+      </section>
+
+      <section id="atalhos">
+        <h2>10. Atalhos essenciais</h2>
+        <table>
+          <thead><tr><th>Atalho</th><th>Funcao</th><th>Atalho</th><th>Funcao</th></tr></thead>
+          <tbody>
+            <tr><td><code>V</code></td><td>Selecionar</td><td><code>L</code></td><td>Linha</td></tr>
+            <tr><td><code>P</code></td><td>Pan</td><td><code>SP</code></td><td>Ponto de sondagem</td></tr>
+            <tr><td><code>F3</code></td><td>OSNAP</td><td><code>F5</code></td><td>ORTHO</td></tr>
+            <tr><td><code>D</code></td><td>Cota</td><td><code>DC</code></td><td>Cota continua</td></tr>
+            <tr><td><code>RO</code></td><td>Rotacionar</td><td><code>F</code></td><td>Fillet</td></tr>
+            <tr><td><code>O</code></td><td>Offset</td><td><code>X</code></td><td>Explode</td></tr>
+            <tr><td><code>OB</code></td><td>Objeto</td><td><code>SEG</code></td><td>Segmento</td></tr>
+            <tr><td><code>J</code></td><td>Join</td><td><code>CT</code></td><td>Curva terreno</td></tr>
+            <tr><td><code>3D</code></td><td>Perfil 3D</td><td><code>2D</code></td><td>Croqui 2D</td></tr>
+            <tr><td><code>PDFSPT</code></td><td>Importar ficha SPT</td><td><code>RSPT</code></td><td>Remover relatorio</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="problemas">
+        <h2>11. Problemas comuns</h2>
+        <h3>O PDF Sondamais nao importou</h3>
+        <p>Verifique se o PDF e pesquisavel. Se for imagem escaneada, converta com OCR ou importe texto/CSV/JSON.</p>
+        <h3>O DWG nao abriu como CAD editavel</h3>
+        <p>Converta o DWG para DXF em AutoCAD, BricsCAD ou ODA File Converter.</p>
+        <h3>Sumiram paineis ou ferramentas</h3>
+        <p>Clique <code>Layout</code> para restaurar a interface.</p>
+        <h3>O perfil 3D ficou sem camadas</h3>
+        <p>Preencha as camadas nos SPs ou importe a ficha Sondamais PDF.</p>
+      </section>
+
+      <section id="responsabilidade">
+        <h2>12. Responsabilidade tecnica</h2>
+        <p>O SONDACAD auxilia a montagem de croquis, cotas e visualizacao estratigrafica. A interpretacao geotecnica, validacao de camadas, profundidades, impenetravel e conclusoes tecnicas devem ser conferidas por profissional habilitado.</p>
+      </section>
+    </article>
+
+    <aside>
+      <h2>Indice</h2>
+      <ul class="toc">
+        <li><a href="#inicio">Objetivo e fluxo</a></li>
+        <li><a href="#interface">Interface</a></li>
+        <li><a href="#desenho">Croqui 2D</a></li>
+        <li><a href="#precisao">Precisao</a></li>
+        <li><a href="#modificar">Modificacao</a></li>
+        <li><a href="#cotas">Cotas</a></li>
+        <li><a href="#perfil3d">Perfil 3D</a></li>
+        <li><a href="#importar">Importacao</a></li>
+        <li><a href="#exportar">Exportacao</a></li>
+        <li><a href="#atalhos">Atalhos</a></li>
+        <li><a href="#problemas">Problemas comuns</a></li>
+      </ul>
+      <div class="callout">
+        Arquivo editavel: <br>
+        <code>MANUAL_TECNICO_SONDACAD.md</code>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>
