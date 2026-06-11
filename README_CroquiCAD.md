@@ -82,13 +82,17 @@ Protótipo local Sondamais de plataforma CAD para croquis de sondagem de solo.
 
 ## Como abrir
 
-Abra o arquivo `index.html` no navegador ou use um servidor local:
+**Pagina inicial:** abra `index.html` no navegador ou acesse a URL do site.
+
+**Ferramenta CAD:** acesse `app.html` (ou `/app` no Render).
+
+Para testar localmente:
 
 ```bash
 npm run preview
 ```
 
-Depois acesse `http://localhost:4173`.
+Depois acesse `http://localhost:4173` para a landing page e `http://localhost:4173/app.html` para a ferramenta.
 
 ## Publicar no Render
 
@@ -97,7 +101,7 @@ Depois acesse `http://localhost:4173`.
 3. Conecte o repositório; o arquivo `render.yaml` na raiz configura o site estático automaticamente.
 4. Alternativa manual: **New > Static Site**, aponte para a raiz do repo, deixe **Build Command** vazio (ou `echo ok`) e **Publish Directory** como `.` (ponto).
 
-O site publica `index.html`, o manual em `manual-tecnico-sondacad.html` e os assets em `assets/`.
+O site publica a landing em `index.html`, a ferramenta em `app.html`, o manual em `manual-tecnico-sondacad.html` e os assets em `assets/`.
 
 ## Limite importante sobre DWG
 

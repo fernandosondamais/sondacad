@@ -8,6 +8,9 @@ services:
       - type: rewrite
         source: /
         destination: /index.html
+      - type: rewrite
+        source: /app
+        destination: /app.html
     headers:
       - path: /**
         name: X-Content-Type-Options
