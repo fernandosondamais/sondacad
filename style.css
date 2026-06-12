@@ -252,26 +252,67 @@ button.danger-soft {
   flex: 1;
 }
 
-.view-tabs-inline {
-  margin-left: calc(12px * var(--toolbar-scale));
-  padding: 0;
+.view-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: calc(14px * var(--toolbar-scale));
+  padding: 4px;
+  border: 1px solid rgba(183, 227, 0, 0.32);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.34);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.view-switcher-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: calc(34px * var(--toolbar-scale));
+  padding: calc(6px * var(--toolbar-scale)) calc(12px * var(--toolbar-scale));
+  border: 1px solid transparent;
+  border-radius: 999px;
   background: transparent;
-  border: 0;
+  color: #d8e8c8;
+  font-size: calc(13px * var(--toolbar-scale));
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
 }
 
-.view-tabs-inline .view-tab {
-  min-height: calc(30px * var(--toolbar-scale));
-  padding: calc(5px * var(--toolbar-scale)) calc(12px * var(--toolbar-scale));
-  color: #dce8cf;
-  border-color: rgba(183, 227, 0, 0.22);
-  background: rgba(255, 255, 255, 0.06);
+.view-switcher-btn:hover {
+  color: #f4fae8;
+  background: rgba(183, 227, 0, 0.12);
+  border-color: rgba(183, 227, 0, 0.28);
 }
 
-.view-tabs-inline .view-tab.is-active {
-  color: #fafff0;
-  border-color: rgba(183, 227, 0, 0.72);
-  background: linear-gradient(180deg, rgba(106, 155, 43, 0.95), rgba(63, 104, 31, 0.95));
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+.view-switcher-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(26px * var(--toolbar-scale));
+  min-height: calc(22px * var(--toolbar-scale));
+  padding: 0 5px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #eef8dc;
+  font-size: calc(11px * var(--toolbar-scale));
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.view-switcher-btn.is-active {
+  color: #142010;
+  border-color: rgba(183, 227, 0, 0.85);
+  background: linear-gradient(180deg, #d8f24f, #b7e300);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+}
+
+.view-switcher-btn.is-active .view-switcher-icon {
+  background: rgba(20, 32, 16, 0.14);
+  color: #1a2a12;
 }
 
 .mark {
@@ -1721,9 +1762,15 @@ h1 {
     flex-wrap: wrap;
   }
 
-  .view-tabs-inline {
+  .view-switcher {
     margin-left: 0;
     width: 100%;
+    justify-content: stretch;
+  }
+
+  .view-switcher-btn {
+    flex: 1;
+    justify-content: center;
   }
 
   .topbar {

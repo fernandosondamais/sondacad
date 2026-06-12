@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=20260611-sondacad28">
-  <script defer src="./app.js?v=20260611-sondacad28"></script>
+  <link rel="stylesheet" href="./style.css?v=20260611-sondacad29">
+  <script defer src="./app.js?v=20260611-sondacad29"></script>
 </head>
 <body>
   <div id="welcomeBanner" class="welcome-banner" role="region" aria-label="Boas-vindas">
@@ -34,9 +34,15 @@
             <h1>SONDACAD</h1>
             <p id="projectSubtitle">Sondamais - croquis e perfil de sondagem</p>
           </div>
-          <nav class="view-tabs view-tabs-inline" aria-label="Telas">
-            <button class="view-tab is-active" data-view="cad" data-key="2D" type="button">Croqui 2D</button>
-            <button class="view-tab" data-view="profile" data-key="3D" type="button">Perfil 3D</button>
+          <nav class="view-switcher" aria-label="Telas">
+            <button class="view-switcher-btn is-active" data-view="cad" type="button" title="Croqui 2D (atalho: 2D)">
+              <span class="view-switcher-icon" aria-hidden="true">2D</span>
+              <span>Croqui 2D</span>
+            </button>
+            <button class="view-switcher-btn" data-view="profile" type="button" title="Perfil 3D (atalho: 3D)">
+              <span class="view-switcher-icon" aria-hidden="true">3D</span>
+              <span>Perfil 3D</span>
+            </button>
           </nav>
         </div>
         <div class="quick-actions" aria-label="Acoes rapidas">
